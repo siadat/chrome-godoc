@@ -2,11 +2,11 @@
 
 Opens godoc for a package, function, or type. Without extension you type:
 
-    localhost:6060/pkg/html/template/#JSEscape
+    localhost:6060/pkg/text/template/#Template.Execute
 
-With extension:
+With extension it is enough to type:
 
-    go templ jse
+    go tetem tex
 
 ## Usage
 

@@ -6,14 +6,18 @@ const tryHosts = [
   "https://tip.golang.org",
 ];
 
-function highlight(text, words) {
-  words
-  .map(word => new RegExp(`(${word})`, 'ig'))
-  .forEach(function(word) {
-    if(text.match(word)) {
-      text = text.replace(word, "\0$1\1")
-    }
-  });
+function highlight(text, word) {
+  let re = newRegExpHighlight(word);
+  if(text.match(re)) {
+    text = text.replace(re, "\0$1\1")
+  }
+
+  re = newRegExpFuzzy(word);
+  if(text.match(re)) {
+    text = text.replace(re, function(m) {
+      return "\0" + m + "\1";
+    });
+  }
 
   return htmlSafe(text).replace(new RegExp("\0", "g"), "<match>")
                        .replace(new RegExp("\1", "g"), "</match>");
@@ -90,18 +94,41 @@ function allPkgs() {
   return cachedPkgs;
 }
 
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
+function newRegExpExact(word) {
+  return new RegExp(escapeRegExp(word), 'i');
+}
+
+function newRegExpHighlight(word) {
+  return new RegExp("(" + escapeRegExp(word) + ")", 'ig');
+}
+
+function newRegExpFuzzy(word) {
+  return new RegExp(word.split('').map(function(ch) { return escapeRegExp(ch); }).join('.{0,10}?'), 'i');
+}
+
 function score(name, query, synopsis) {
-  const nLen = name.length;
-  const rLen = query.length;
-  if(name.match(new RegExp(query, 'i'))) {
-    return 1 - 0.5 * Math.abs(nLen - rLen)/Math.max(nLen, rLen);
+  if(name.match(newRegExpExact(query))) {
+    return (1 - wordsLenDiff(name, query));
+  }
+  if(name.match(newRegExpFuzzy(query))) {
+    return (1 - wordsLenDiff(name, query))/2.0;
   }
   if(!synopsis) {
     return 0;
   }
-  if(synopsis.match(new RegExp(query, 'i'))) {
-    return (1 - 1.0 * query.length/synopsis.length)/2;
+  if(synopsis.match(newRegExpExact(query))) {
+    return (1 - wordsLenDiff(synopsis, query))/2.0;
   }
+}
+
+function wordsLenDiff(word1, word2) {
+  const len1 = word1.length;
+  const len2 = word2.length;
+  return Math.abs(len1-len2) / Math.max(len1, len2);
 }
 
 function sortedPkgs(pkgQuery) {
@@ -143,13 +170,13 @@ function parseUserInput(text) {
     return sortedFuncs(pkg.name, funcQuery)
       .map(r => ({
         content: `${pkg.name}/#${r.name}`,
-        description: `<url>${highlight(pkg.name, [pkgQuery])}#${highlight(r.name, [funcQuery])}</url> ${highlight(r.synopsis, [])}`,
+        description: `<url>${highlight(pkg.name, pkgQuery)}#${highlight(r.name, funcQuery)}</url> ${highlight(r.synopsis, '')}`,
         // description: r.description,
       }));
   } else {
     return sortedPkgs(pkgQuery).map(r => ({
       content: r.name,
-      description: `<url>${highlight(r.name, [pkgQuery])}</url> ${highlight(r.synopsis, [])}`,
+      description: `<url>${highlight(r.name, pkgQuery)}</url> ${highlight(r.synopsis, '')}`,
       // description: r.description,
     }));
   }
