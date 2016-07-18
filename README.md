@@ -1,5 +1,7 @@
 # Godoc finder for Chrome omnibox
 
+![Using chrome-godoc](http://g.recordit.co/GajNOXsMnO.gif)
+
 Opens godoc for a package, function, or type. Without extension you type:
 
     localhost:6060/pkg/text/template/#Template.Execute
