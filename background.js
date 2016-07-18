@@ -8,16 +8,12 @@ const tryHosts = [
 
 function highlight(text, word) {
   let re = newRegExpHighlight(word);
-  if(text.match(re)) {
-    text = text.replace(re, "\0$1\1")
-  }
+  text = text.replace(re, "\0$1\1")
 
   re = newRegExpFuzzy(word);
-  if(text.match(re)) {
-    text = text.replace(re, function(m) {
-      return "\0" + m + "\1";
-    });
-  }
+  text = text.replace(re, function(m) {
+    return "\0" + m + "\1";
+  });
 
   return htmlSafe(text).replace(new RegExp("\0", "g"), "<match>")
                        .replace(new RegExp("\1", "g"), "</match>");
