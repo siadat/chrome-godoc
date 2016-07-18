@@ -1,19 +1,15 @@
 let cachedPkgs = {};
 let cachedFuncs = {};
 let docHost = "";
+
 const tryHosts = [
   "http://localhost:6060",
   "https://tip.golang.org",
 ];
 
 function highlight(text, word) {
-  let re = newRegExpHighlight(word);
-  text = text.replace(re, "\0$1\1")
-
-  re = newRegExpFuzzy(word);
-  text = text.replace(re, function(m) {
-    return "\0" + m + "\1";
-  });
+  text = text.replace(newRegExpHighlight(word), "\0$1\1")
+  text = text.replace(newRegExpFuzzy(word), m => "\0" + m + "\1");
 
   return htmlSafe(text).replace(new RegExp("\0", "g"), "<match>")
                        .replace(new RegExp("\1", "g"), "</match>");
@@ -103,7 +99,7 @@ function newRegExpHighlight(word) {
 }
 
 function newRegExpFuzzy(word) {
-  return new RegExp(word.split('').map(function(ch) { return escapeRegExp(ch); }).join('.{0,10}?'), 'i');
+  return new RegExp(word.split('').map(ch => escapeRegExp(ch)).join('.{0,10}?'), 'i');
 }
 
 function score(name, query, synopsis) {
