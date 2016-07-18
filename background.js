@@ -145,8 +145,8 @@ function sortedPkgs(pkgQuery) {
 }
 
 function sortedFuncs(pkg, funcQuery) {
-  keys = Object.keys(pkgFuncs(pkg))
-    r = keys.sort(function(name1, name2) {
+  return Object.keys(pkgFuncs(pkg))
+    .sort(function(name1, name2) {
       const score1 = score(name1, funcQuery);
       const score2 = score(name2, funcQuery);
       if(score1 < score2) return 1;
@@ -155,7 +155,6 @@ function sortedFuncs(pkg, funcQuery) {
     })
     .map(name => pkgFuncs(pkg)[name])
     .slice(0, 5);
-  return r;
 }
 
 function parseUserInput(text) {
@@ -171,13 +170,11 @@ function parseUserInput(text) {
       .map(r => ({
         content: `${pkg.name}/#${r.name}`,
         description: `<url>${highlight(pkg.name, pkgQuery)}#${highlight(r.name, funcQuery)}</url> ${highlight(r.synopsis, '')}`,
-        // description: r.description,
       }));
   } else {
     return sortedPkgs(pkgQuery).map(r => ({
       content: r.name,
       description: `<url>${highlight(r.name, pkgQuery)}</url> ${highlight(r.synopsis, '')}`,
-      // description: r.description,
     }));
   }
 }
