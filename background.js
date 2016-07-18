@@ -1,6 +1,7 @@
 let cachedPkgs = {};
 let cachedFuncs = {};
 let docHost = "";
+let lastPkg = "";
 
 const tryHosts = [
   "http://localhost:6060",
@@ -8,7 +9,7 @@ const tryHosts = [
 ];
 
 function highlight(text, word) {
-  text = text.replace(newRegExpHighlight(word), "\0$1\1")
+  text = text.replace(newRegExpHighlight(word), "\0$1\1");
   text = text.replace(newRegExpFuzzy(word), m => "\0" + m + "\1");
 
   return htmlSafe(text).replace(new RegExp("\0", "g"), "<match>")
@@ -155,6 +156,14 @@ function parseUserInput(text) {
   let words = text.split(/[\s#]+/, 2)
   let pkgQuery = words[0].replace(/\/$/, '');
   let funcQuery = words[1];
+
+  if(words[0].length === 0 && lastPkg) {
+    pkgQuery = lastPkg;
+  }
+
+  if(pkgQuery) {
+    lastPkg = pkgQuery;
+  }
 
   if(text.match(/\s$/) || words.length > 1) {
     let pkg = sortedPkgs(pkgQuery)[0];
