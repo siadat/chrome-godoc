@@ -21,13 +21,15 @@ In the addressbar (omnibox) type:
 
 The extension first tries to fetch the docs from http://localhost:6060. If that fails, it will try https://tip.golang.org.
 
-## Pro tips
+**Recommended** start your own local Go doc server (`godoc -http:6060`) and clear the extension cache by entering `go !` in the omnibox.
 
-**clear the cache** enter `go !` and press Enter.
+## Tips
 
-**select the first match** press Enter without pressing down.
+**Clear the cache** enter `go !` and press Enter.
 
-**avoid retyping the name of the last package** start query with `#` e.g. `go #new`
+**Select the first match** press Enter without pressing down.
+
+**Avoid retyping the name of the last package** start query with `#` e.g. `go #new`
 
 ## Contributing
 
