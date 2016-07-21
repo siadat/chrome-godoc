@@ -2,35 +2,35 @@
 
 ![Using chrome-godoc](http://g.recordit.co/GajNOXsMnO.gif)
 
-Opens godoc for a package, function, or type. Without extension you type:
-
-    localhost:6060/pkg/text/template/#Template.Execute
-
-With extension it is enough to type:
-
-    go tetem tex
-
 ## Usage
 
+In the addressbar (omnibox) type:
+
     go PACKAGE [FUNC|TYPE]
+    go PACKAGE#[FUNC|TYPE]
+    go #[FUNC|TYPE]
+    go !
 
 ## Example
 
-In the omnibox type:
-
     go http
-
-or
-
-    go httpu dump
+    go httpu newconn
+    go httpu#newconn
+    go #newconn
+    go !
 
 The extension first tries to fetch the docs from http://localhost:6060. If that fails, it will try https://tip.golang.org.
 
-**Note:** To select the first match, press Enter without pressing down.
+## Pro tips
+
+**clear the cache** enter `go !` and press Enter.
+
+**select the first match** press Enter without pressing down.
+
+**avoid retyping the name of the last package** start query with `#` e.g. `go #new`
 
 ## Contributing
 
-- Fork and submit a pull request
 - [Send a feature request](https://github.com/siadat/chrome-godoc/issues/new)
 - [Report a problem](https://github.com/siadat/chrome-godoc/issues/new)
 

@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
 
-  "name": "godoc",
+  "name": "Go doc finder",
   "short_name": "go",
-  "description": "Quickly search godoc packages from localhost:6060 or tip.golang.org",
-  "version": "0.2",
+  "description": "Quickly find Go doc packages served in localhost:6060 or tip.golang.org",
+  "version": "0.4.0",
   "author": "Sina Siadat <siadat@gmail.com>",
   "homepage_url": "https://github.com/siadat/chrome-godoc",
   "permissions": [

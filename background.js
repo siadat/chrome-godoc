@@ -188,10 +188,14 @@ chrome.omnibox.onInputChanged.addListener(
 
 chrome.omnibox.onInputEntered.addListener(
   function(text) {
-    chrome.tabs.create({url: (function() {
-      let results = parseUserInput(text);
-      if(results.length === 0) return;
-      return `${docHost}/pkg/${results[0].content}`;
-    })()});
+    if (text === "!") {
+      cachedPkgs  = {};
+      cachedFuncs = {};
+      return;
+    }
+    let results = parseUserInput(text);
+    if(results.length === 0) return;
+    let url = `${docHost}/pkg/${results[0].content}`;
+    chrome.tabs.create({url: url});
   }
 );
